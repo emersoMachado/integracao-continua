@@ -1,0 +1,26 @@
+name: "Verificações de código"
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+      - name: Run linters
+        run: docker compose up -d postgres
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.64.0
+          args: controller/ database/ models/ routes/
+
+      - name: Run tests
+        run: DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_USER=${{ secrets.DB_USER }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} go test -v ./...
