@@ -2,8 +2,7 @@ name: "Construção do artefato"
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
