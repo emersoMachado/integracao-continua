@@ -2,7 +2,8 @@ name: "Construção do artefato"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "github_integracao_continua"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,15 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-      - name: Build
-        run: go build main.go
-
-      - name: Projeto compilado
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: main
+      - name: Build docker image
+        run: go build --target=production -t emersoMachado/projeto-go:${{ github.sha }} .
