@@ -25,4 +25,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: latest,${{ github.sha }}
+          tags: emachado98/integracao_continua:latest,emachado98/integracao_continua:${{ github.sha }}
